@@ -3,10 +3,12 @@ import "./App.css";
 import LawsuitsPage from "./pages/lawsuits/lawsuitsPage";
 import Layout from "./pages/layout";
 import RemoteResourceFactory from "./utils/http/RemoteResourceFactory";
-import LawsuitsServiceImpl from "./services/impl/lawsuitsServiceImpl";
+import ClientServiceImpl from "./services/impl/client-service-impl";
+import ClientPage from "./pages/client/client-page";
 
-const restRemoteResource = RemoteResourceFactory.create();
-const lawsuitsService = new LawsuitsServiceImpl(restRemoteResource);
+const factory = new RemoteResourceFactory();
+
+const clientService = new ClientServiceImpl(factory);
 
 function App() {
   return (
@@ -15,8 +17,9 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route
             path="lawsuits"
-            element={<LawsuitsPage service={lawsuitsService} />}
+            element={<LawsuitsPage clientService={clientService} />}
           />
+          <Route path="client" element={<ClientPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

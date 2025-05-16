@@ -1,6 +1,8 @@
 import DataProvider, {
   FetchByKeysParams,
   FetchByKeysResult,
+  FetchDataParams,
+  FetchDataResult,
   Item,
 } from "../data-provider";
 
@@ -35,8 +37,8 @@ export default class ArrayDataProvider<K, V extends object>
    *
    * @returns A promise that resolves to an array of values.
    */
-  fetchData(): Promise<V[]> {
-    return Promise.resolve(this.data);
+  fetchData(params?: FetchDataParams<V>): Promise<FetchDataResult<K, V>> {
+    return Promise.resolve({ results: this.data, fetchParams: params });
   }
 
   /**

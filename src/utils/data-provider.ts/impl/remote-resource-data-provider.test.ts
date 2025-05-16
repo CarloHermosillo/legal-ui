@@ -33,7 +33,7 @@ describe("RemoteResourceDataProvider", () => {
 
     // validate
     expect(result).not.toBeNull();
-    expect(result.length).toBe(2);
+    expect(result.results.length).toBe(2);
   });
 
   it("fetchByKeys SHOULD return data filtered by keys", async () => {

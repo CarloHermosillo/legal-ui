@@ -1,44 +1,57 @@
 import React from "react";
-import Table, { Column, Row } from "../../components/table/Table";
+import Table from "../../components/table/Table";
 import LawsuitsService from "../../services/lawsuitsService";
 import Lawsuit from "../../domain/lawsuit";
+import DataProvider from "../../utils/data-provider.ts/data-provider";
+import Select from "../../components/select/select";
+import ClientService from "../../services/client-service";
+import Client from "../../domain/client";
 
-type Props = { service: LawsuitsService };
-type State = { lawsuits: Lawsuit[], rows: Row[] };
+type Props = {
+  lawsuitService?: LawsuitsService;
+  clientService: ClientService;
+};
+type State = {
+  clientDP: DataProvider<string, Client>;
+  lawsuitDP: DataProvider<string, Lawsuit> | null;
+};
 
 export default class LawsuitsPage extends React.Component<Props, State> {
-
-  private readonly service: LawsuitsService;
-  private readonly columns: Column[] = [{  id: 1, name: 'topic' }, {  id: 2, name: 'fee' }, {  id: 3, name: 'payed' }, {  id: 4, name: 'lawsuitType' }];
+  private readonly clientService: ClientService;
 
   constructor(props: Props) {
     super(props);
 
-    this.service = props.service;
-    this.state = { lawsuits: [], rows: [] };
+    this.clientService = props.clientService;
 
+    this.state = {
+      clientDP: this.clientService.fetchClients(),
+      lawsuitDP: null,
+    };
   }
 
-  async componentDidMount(): Promise<void> {
-    const lawsuits = await this.service.fetchLawsuits();
+  onClientSelected(client: Client): void {
+    console.log(client);
 
-    let rows: Row[] = [];
+    const lawsuitDP = this.clientService.fetchLawsuits({ id: client.id });
 
-    for (const lawsuit of lawsuits) {
-      const keys = Object.keys(lawsuit).filter(k => k !== 'client' && k !== 'id');
-
-      rows.push({ id: lawsuit.id, keys, values: lawsuit });
-    }
-
-    this.setState({ lawsuits, rows });
+    this.setState({
+      ...this.state,
+      lawsuitDP,
+    });
   }
 
   render(): React.ReactNode {
     return (
-      <Table
-        columns={ this.columns }
-        rows={ this.state.rows }
-      />
-    )
+      <div>
+        <Select
+          dataProvider={this.state.clientDP}
+          keyAttribute="id"
+          displayValue="name"
+          onSelect={(client) => this.onClientSelected(client)}
+        />
+        <Table dataProvider={this.state.lawsuitDP} />
+      </div>
+    );
   }
 }

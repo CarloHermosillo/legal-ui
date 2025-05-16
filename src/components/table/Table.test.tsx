@@ -1,19 +1,18 @@
 import { render, screen } from "@testing-library/react";
 import Table from "./Table";
+import ArrayDataProvider from "../../utils/data-provider.ts/impl/array-data-provider";
 
 describe("Table", () => {
   test("render table", async () => {
-    render(
-      <Table
-        columns={[
-          { name: "column1", id: 1 },
-          { name: "column2", id: 2 },
-        ]}
-        rows={[
-          { keys: ["c1", "c2"], values: { c1: "field1", c2: "field2" }, id: "1" },
-        ]}
-      />
-    );
+    const dp = new ArrayDataProvider<number, any>({
+      data: [
+        { id: "1", c1: "field1", c2: "field2" },
+        { id: "2", c1: "field3", c2: "field4" },
+      ],
+      keyAttribute: "id",
+    });
+
+    render(<Table dataProvider={dp} />);
 
     const elem = await screen.findByRole("table");
 

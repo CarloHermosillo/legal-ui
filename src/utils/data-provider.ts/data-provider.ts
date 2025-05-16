@@ -10,7 +10,7 @@ export default interface DataProvider<K, V> {
    *
    * @returns A promise that resolves to an array of values.
    */
-  fetchData(): Promise<V[]>;
+  fetchData(param?: FetchDataParams<V>): Promise<FetchDataResult<K, V>>;
 
   /**
    * Retrieves specific data from the provider based on the provided keys.
@@ -54,6 +54,41 @@ export interface FetchByKeysParams<K> {
    * Optional attributes to filter the fetched data.
    */
   attributes?: string[];
+}
+
+/**
+ * Parameters for fetching data.
+ *
+ * @template V The type of value returned by the data provider.
+ */
+export interface FetchDataParams<V> {
+  /**
+   * Optional attributes to filter the fetched data.
+   */
+  attributes?: string[];
+}
+
+/**
+ * Represents the result of a fetch operation.
+ *
+ * @template K The type of key used to identify data.
+ * @template V The type of value returned by the data provider.
+ */
+export interface FetchDataResult<K, V> {
+  /**
+   * The results of the fetch operation.
+   */
+  results: V[];
+
+  /**
+   * The parameters used to fetch the data.
+   */
+  fetchParams?: FetchDataParams<V>;
+
+  /**
+   * The keys used to identify the data.
+   */
+  keys?: K[];
 }
 
 /**

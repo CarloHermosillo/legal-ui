@@ -1,22 +1,15 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Navbar from "../components/navbar/navbar";
 
 export default class Layout extends React.Component {
   render(): React.ReactNode {
     return (
       <>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/lawsuits">Lawsuits</Link>
-            </li>
-          </ul>
-        </nav>
-
-        <Outlet />
+        <Navbar />
+        <div className="container text-center">
+          <Outlet />
+        </div>
       </>
     );
   }

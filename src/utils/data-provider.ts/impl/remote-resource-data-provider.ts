@@ -1,6 +1,8 @@
 import DataProvider, {
   FetchByKeysParams,
   FetchByKeysResult,
+  FetchDataParams,
+  FetchDataResult,
 } from "../data-provider";
 import RemoteResource from "../../http/RemoteResource";
 
@@ -31,8 +33,13 @@ export class RemoteResourceDataProvider<K, V> implements DataProvider<K, V> {
    *
    * @returns A promise that resolves to an array of values.
    */
-  async fetchData(): Promise<V[]> {
-    return this.remoteResource.fetch();
+  async fetchData(params?: FetchDataParams<V>): Promise<FetchDataResult<K, V>> {
+    const data = await this.remoteResource.fetch();
+
+    return {
+      results: data,
+      fetchParams: params,
+    };
   }
 
   /**

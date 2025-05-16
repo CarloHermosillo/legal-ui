@@ -51,7 +51,7 @@ describe("ArrayDataProvider", () => {
     const result = await dp.fetchData();
 
     // validate
-    expect(result.length).toBe(3);
+    expect(result.results.length).toBe(3);
   });
 
   it("fetchByKeys SHOULD return data filtered by attributes", async () => {
